@@ -8,3 +8,5 @@ let changeTimer = setInterval(() => {
     alert("Вы победили в конкурсе!");
   }
 }, 1000);
+
+console.log(new Date());
