@@ -1,9 +1,12 @@
+let resWords;
+
 class Game {
   constructor(container) {
     this.container = container;
     this.wordElement = container.querySelector('.word');
     this.winsElement = container.querySelector('.status__wins');
-    this.lossElement = container.querySelector('.status__loss');
+    this.lossElement = container.querySelector('.status__loss'),
+    this.statusTimer = container.querySelector('.status__timer');
 
     this.reset();
 
@@ -14,17 +17,40 @@ class Game {
     this.setNewWord();
     this.winsElement.textContent = 0;
     this.lossElement.textContent = 0;
+    this.timer();
   }
 
   registerEvents() {
-    /*
-      TODO:
-      Написать обработчик события, который откликается
-      на каждый введённый символ.
-      В случае правильного ввода слова вызываем this.success()
-      При неправильном вводе символа - this.fail();
-      DOM-элемент текущего символа находится в свойстве this.currentSymbol.
-     */
+    let inputSymbol;
+    let current = this;
+
+    function characterCheck(event) {
+      inputSymbol = event.key;
+      
+      if(current.currentSymbol.textContent == inputSymbol) {
+        current.success();
+      } else {
+        current.fail();
+      }
+    }
+
+    document.addEventListener('keydown', characterCheck);
+    this.timer();
+  }
+  timer() {
+    let counter = resWords.length;
+    this.statusTimer.textContent = counter;
+
+ let interval = setInterval(() => {
+      if(counter > 0) {
+        --counter;
+        // this.statusTimer.textContent = counter;
+      } else {  
+        clearInterval(interval);
+        this.reset();
+        // this.statusTimer.textContent = counter; 
+      }
+    }, 1000);
   }
 
   success() {
@@ -73,8 +99,8 @@ class Game {
         'javascript'
       ],
       index = Math.floor(Math.random() * words.length);
-
-    return words[index];
+    resWords = words[index];
+    return resWords;
   }
 
   renderWord(word) {
@@ -85,10 +111,11 @@ class Game {
       )
       .join('');
     this.wordElement.innerHTML = html;
+    this.timer();
 
     this.currentSymbol = this.wordElement.querySelector('.symbol_current');
   }
 }
 
-new Game(document.getElementById('game'))
+new Game(document.getElementById('game'));
 

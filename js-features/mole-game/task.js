@@ -24,3 +24,14 @@ function checkWinner() {
 	});
 }
 checkWinner();
+
+const star = document.querySelectorAll('.star');
+
+star.forEach((item,i) => {
+	item.addEventListener('click', () => {
+		item.classList.add('star_active');
+		for(let i = 0; i > item[0]; i++){
+			item.classList.add('star_active');
+		}
+	});
+});
