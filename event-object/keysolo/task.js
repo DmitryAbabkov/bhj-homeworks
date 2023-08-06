@@ -1,119 +1,125 @@
 let resWords;
 
 class Game {
-  constructor(container) {
-    this.container = container;
-    this.wordElement = container.querySelector(".word");
-    this.winsElement = container.querySelector(".status__wins");
-    (this.lossElement = container.querySelector(".status__loss")),
-      (this.statusTimer = container.querySelector(".status__timer"));
+	constructor(container) {
+		this.container = container;
+		this.wordElement = container.querySelector(".word");
+		this.winsElement = container.querySelector(".status__wins");
+		this.lossElement = container.querySelector(".status__loss"),
+			this.statusTimer = container.querySelector(".status__timer");
 
-    this.reset();
+		this.reset();
 
-    this.registerEvents();
-  }
+		this.registerEvents();
+	}
 
-  reset() {
-    this.setNewWord();
-    this.winsElement.textContent = 0;
-    this.lossElement.textContent = 0;
-  }
+	reset() {
+		this.setNewWord();
+		this.winsElement.textContent = 0;
+		this.lossElement.textContent = 0;
+	}
 
-  registerEvents() {
-    let inputSymbol;
-    let current = this;
+	registerEvents() {
+		let inputSymbol;
+		let current = this;
 
-    function characterCheck(event) {
-      inputSymbol = event.key;
+		function characterCheck(event) {
+			inputSymbol = event.key;
 
-      if (current.currentSymbol.textContent == inputSymbol) {
-        current.success();
-      } else {
-        current.fail();
-      }
-    }
+			if (current.currentSymbol.textContent == inputSymbol) {
+				current.success();
+			} else {
+				current.fail();
+			}
+		}
 
-    document.addEventListener("keydown", characterCheck);
-  }
-  timer() {
-    let counter = resWords.length;
-    this.statusTimer.textContent = counter;
+		document.addEventListener("keydown", characterCheck);
+	}
+	timer() {
+		let counter = resWords.length;
+		this.statusTimer.textContent = counter;
 
-    //  let interval = setInterval(() => {
-    //       if(counter > 0) {
-    //         --counter;
-    //         // this.statusTimer.textContent = counter;
-    //       } else {
-    //         clearInterval(interval);
-    //         this.reset();
-    //         // this.statusTimer.textContent = counter;
-    //       }
-    //     }, 1000);
-  }
+		if (this.interval) {
+			clearInterval(this.interval);
+		}
 
-  success() {
-    if (this.currentSymbol.classList.contains("symbol_current"))
-      this.currentSymbol.classList.remove("symbol_current");
-    this.currentSymbol.classList.add("symbol_correct");
-    this.currentSymbol = this.currentSymbol.nextElementSibling;
+		this.interval = setInterval(() => {
+			if (counter > 0) {
+				--counter;
+				this.statusTimer.textContent = counter;
+			} else {
+				clearInterval(this.interval);
+				if (this.fail()) {
+					return;
+				}
+				this.setNewWord();
+			}
+		}, 1000);
+	}
 
-    if (this.currentSymbol !== null) {
-      this.currentSymbol.classList.add("symbol_current");
-      return;
-    }
+	success() {
+		if (this.currentSymbol.classList.contains("symbol_current"))
+			this.currentSymbol.classList.remove("symbol_current");
+		this.currentSymbol.classList.add("symbol_correct");
+		this.currentSymbol = this.currentSymbol.nextElementSibling;
 
-    if (++this.winsElement.textContent === 10) {
-      alert("Победа!");
-      this.reset();
-    }
-    this.setNewWord();
-  }
+		if (this.currentSymbol !== null) {
+			this.currentSymbol.classList.add("symbol_current");
+			return;
+		}
 
-  fail() {
-    if (++this.lossElement.textContent === 5) {
-      alert("Вы проиграли!");
-      this.reset();
-    }
-    this.setNewWord();
-  }
+		if (++this.winsElement.textContent === 10) {
+			alert("Победа!");
+			this.reset();
+		}
+		this.setNewWord();
+	}
 
-  setNewWord() {
-    const word = this.getWord();
+	fail() {
+		if (++this.lossElement.textContent === 5) {
+			alert("Вы проиграли!");
+			this.reset();
+		}
+		this.setNewWord();
+	}
 
-    this.renderWord(word);
-  }
+	setNewWord() {
+		const word = this.getWord();
 
-  getWord() {
-    const words = [
-        "bob",
-        "awesome",
-        "netology",
-        "hello",
-        "kitty",
-        "rock",
-        "youtube",
-        "popcorn",
-        "cinema",
-        "love",
-        "javascript",
-      ],
-      index = Math.floor(Math.random() * words.length);
-    resWords = words[index];
-    return resWords;
-  }
+		this.renderWord(word);
+	}
 
-  renderWord(word) {
-    const html = [...word]
-      .map(
-        (s, i) =>
-          `<span class="symbol ${i === 0 ? "symbol_current" : ""}">${s}</span>`
-      )
-      .join("");
-    this.wordElement.innerHTML = html;
+	getWord() {
+		const words = [
+				"bob",
+				"awesome",
+				"netology",
+				"hello",
+				"kitty",
+				"rock",
+				"youtube",
+				"popcorn",
+				"cinema",
+				"love",
+				"javascript",
+			],
+			index = Math.floor(Math.random() * words.length);
+		resWords = words[index];
+		return resWords;
+	}
 
-    this.currentSymbol = this.wordElement.querySelector(".symbol_current");
-    this.timer();
-  }
+	renderWord(word) {
+		const html = [...word]
+			.map(
+				(s, i) =>
+				`<span class="symbol ${i === 0 ? "symbol_current" : ""}">${s}</span>`
+			)
+			.join("");
+		this.wordElement.innerHTML = html;
+
+		this.currentSymbol = this.wordElement.querySelector(".symbol_current");
+		this.timer();
+	}
 }
 
 new Game(document.getElementById("game"));
