@@ -25,7 +25,9 @@ class Game {
 
 		function characterCheck(event) {
 			inputSymbol = event.key;
-
+			if(event.code == "ShiftLeft" || event.code == "AltLeft") {
+				return false;
+			}
 			if (current.currentSymbol.textContent == inputSymbol) {
 				current.success();
 			} else {
@@ -91,17 +93,17 @@ class Game {
 
 	getWord() {
 		const words = [
-				"bob",
-				"awesome",
-				"netology",
-				"hello",
-				"kitty",
-				"rock",
-				"youtube",
-				"popcorn",
-				"cinema",
-				"love",
-				"javascript",
+				"это bob",
+				"это awesome",
+				"это netology",
+				"это hello",
+				"это kitty",
+				"это rock",
+				"это youtube",
+				"это popcorn",
+				"это cinema",
+				"love - это любовь",
+				"я люблю javascript",
 			],
 			index = Math.floor(Math.random() * words.length);
 		resWords = words[index];
