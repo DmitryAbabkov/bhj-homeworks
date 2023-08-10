@@ -26,17 +26,9 @@ fontSize.forEach((item,i) => {
     });
 });
 
-function searchRemoveBg(current, arr) {
-    background.forEach(item => {
-        if(item.dataset.bgColor != current) {
-            arr.push(item);
-        }
-    });
-   }
-
-   function searchRemoveColor(current, arr) {
-    color.forEach(item => {
-        if(item.dataset.textColor != current) {
+   function searchColor(current, arr, iteratedElement, color) {
+    iteratedElement.forEach(item => {
+        if(item.dataset[color] != current) {
             arr.push(item);
         }
     });
@@ -50,7 +42,7 @@ function searchRemoveBg(current, arr) {
 		book.classList.add(`bg_color_${currentBg}`);
         item.classList.add(`color_active`);
 		let arr = [];
-		searchRemoveBg(currentBg, arr);
+		searchColor(currentBg, arr, background, `bgColor`);
 		arr.forEach(item => {
 			book.classList.remove(`bg_color_${item.dataset.bgColor}`);
             item.classList.remove('color_active');
@@ -66,7 +58,7 @@ color.forEach(item => {
         book.classList.add(`book_color-${currentColor}`);
         item.classList.add('color_active');
         let arr = [];
-        searchRemoveColor(currentColor, arr, color);
+        searchColor(currentColor, arr, color, `textColor`);
         arr.forEach(item => {
 			book.classList.remove(`book_color-${item.dataset.textColor}`);
             item.classList.remove('color_active');
