@@ -1,6 +1,6 @@
 const rotator = Array.from(document.querySelectorAll('.rotator__case'));
-let attributeColor = [];
-let attributeSpeed = [];
+let attributeColor = [],
+attributeSpeed = [];
 
 function getColor() {
 	rotator.forEach((item) => {

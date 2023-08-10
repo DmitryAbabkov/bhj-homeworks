@@ -5,64 +5,59 @@ const fontSize = Array.from(document.querySelectorAll('.font-size')),
  color = Array.from(document.querySelectorAll('.book__control_color .color'));
 let indexActive = fontSize.indexOf(activeClass);
 
+function searchSize(currentSize) {
+    let filteredItems = [];
+    fontSize.forEach(item => {
+        if(item.dataset.size != currentSize) {
+            filteredItems.push(item);
+        }
+        filteredItems.forEach(item => {
+            book.classList.remove(`book_fs-${item.dataset.size}`);
+            const result = currentSize != undefined ? book.classList.add(`book_fs-${currentSize}`): ``;
+            return result;
+        });
+    });
+}
+
 fontSize.forEach((item,i) => {
     item.addEventListener('click', (e) => {
         e.preventDefault();
         fontSize[indexActive].classList.remove('font-size_active');
         fontSize[i].classList.add('font-size_active');
         indexActive = i;
-        
-        if(item.dataset.size === 'small') {
-            book.classList.remove('book_fs-big');
-            book.classList.add('book_fs-small');
-        } 
-        else if (item.dataset.size === 'big') {
-            book.classList.remove('book_fs-small');
-            book.classList.add('book_fs-big');
-        } else {
-            book.classList.remove('book_fs-big');
-            book.classList.remove('book_fs-small');
-        }
+        let currentSize = item.dataset.size;
+        searchSize(currentSize);
     });
 });
 
-   function searchColor(current, arr, iteratedElement, color) {
+   function searchColor(current, iteratedElement, color, addClass) {
+    let filteredItems = [];
     iteratedElement.forEach(item => {
+        book.classList.add(`${addClass}${current}`);
+        item.classList.add('color_active');
+
         if(item.dataset[color] != current) {
-            arr.push(item);
+            filteredItems.push(item);
         }
+        filteredItems.forEach(item => {
+			book.classList.remove(`${addClass}${item.dataset[color]}`);
+            item.classList.remove('color_active');
+		});
     });
    }
-// Вот здесь я преисполнился и написал, вроде как, самый умный код на диком западе
 
    background.forEach(item => {
 	item.addEventListener('click', (e) => {
 		e.preventDefault();
 		let currentBg = item.dataset.bgColor;
-		book.classList.add(`bg_color_${currentBg}`);
-        item.classList.add(`color_active`);
-		let arr = [];
-		searchColor(currentBg, arr, background, `bgColor`);
-		arr.forEach(item => {
-			book.classList.remove(`bg_color_${item.dataset.bgColor}`);
-            item.classList.remove('color_active');
-		});
+		searchColor(currentBg, background, `bgColor`, `bg_color_`);
 	});
 });
-// Не понял, как здесь можно избежать дублирования
 
 color.forEach(item => {
     item.addEventListener('click', (e)=> {
         e.preventDefault();
         let currentColor = item.dataset.textColor;
-        book.classList.add(`book_color-${currentColor}`);
-        item.classList.add('color_active');
-        let arr = [];
-        searchColor(currentColor, arr, color, `textColor`);
-        arr.forEach(item => {
-			book.classList.remove(`book_color-${item.dataset.textColor}`);
-            item.classList.remove('color_active');
-		});
-        
+        searchColor(currentColor, color, `textColor`, `book_color-`);
     });
 });
