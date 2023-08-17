@@ -26,6 +26,10 @@ body {
   height: 100px;
   object-fit: contain;
 }
+
+.cart__product-remove {
+  cursor: pointer;
+}
 .product {
   display: flex;
   flex-wrap: wrap;
