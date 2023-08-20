@@ -22,4 +22,5 @@
 
 .tooltip_active {
   display: block;
+  cursor: pointer;
 }

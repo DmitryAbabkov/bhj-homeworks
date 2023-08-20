@@ -5,7 +5,7 @@ function showTooltip(item) {
         tooltip.classList.add('tooltip');
         tooltip.classList.add('tooltip_active');
         tooltip.innerText = item.getAttribute('Title');
-        item.append(tooltip);  
+        item.after(tooltip)
 }
 
 tooltipHas.forEach(item => {
@@ -17,8 +17,13 @@ tooltipHas.forEach(item => {
         let topPosition = item.getBoundingClientRect().top;
         console.log(item.getBoundingClientRect().right);
         tooltip.setAttribute('style', `left: ${leftPosition}px; top: ${topPosition+20}px`);
+        showTooltip(item);
     });
 });
+
+tooltip.addEventListener('click', () => {
+    tooltip.remove();
+})
 
 window.addEventListener('scroll', () => {
     tooltip.classList.remove('tooltip_active');

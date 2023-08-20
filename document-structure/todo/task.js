@@ -3,6 +3,7 @@ const form = document.querySelector('form'),
 	list = document.querySelector('.tasks__list');
 let counterArr = localStorage.length;
 let currentId = 0;
+let arrToLocalSorage = [];
 
 function generationContent(value, currentId) {
 	list.insertAdjacentHTML('beforeend', `
@@ -17,26 +18,25 @@ function generationContent(value, currentId) {
 
 form.addEventListener('submit', (e) => {
 	e.preventDefault();
-	if (input.value != '') {
-		generationContent(input.value, currentId);
-		localStorage.setItem(`${currentId}`, `${input.value}`);
+	if (input.value != false ) {
+		let stringValue = input.value;
+		stringValue = stringValue.trim();
+		console.log(stringValue);
+		generationContent(stringValue, currentId);
+		arrToLocalSorage.push(stringValue);
+		localStorage.setItem('tasks', arrToLocalSorage);
 		++currentId;
 	}
 	form.reset();
 });
 
-let arr = [];
-
 function generationTasks() {
-	for (let i = 0; i < localStorage.length; i++) {
-		let key = localStorage.key(i);
-		arr.push(localStorage.getItem(key));
-	}
-	arr.reverse();
-	arr.forEach(item => {
+	if(localStorage.length > 0){
+		arrToLocalSorage = localStorage.getItem('tasks').split(',');
+	arrToLocalSorage.forEach(item => {
 		generationContent(item, currentId);
-		++currentId;
-	});
+		currentId++;
+	})}
 }
 
 list.addEventListener('click', (e) => {
@@ -44,8 +44,15 @@ list.addEventListener('click', (e) => {
 		const taskElement = e.target.closest('.task');
 		const taskId = taskElement.getAttribute('data-id');
 		taskElement.remove();
-		localStorage.removeItem(taskId);
+		const storedTasks = localStorage.getItem('tasks');
+		if (storedTasks) {
+			const tasksArray = storedTasks.split(',');
+			tasksArray.splice(taskId, 1);
+			localStorage.setItem('tasks', tasksArray.join(','));
+		}
 	}
 });
 
 document.addEventListener('DOMContentLoaded', generationTasks());
+
+// localStorage.clear();
