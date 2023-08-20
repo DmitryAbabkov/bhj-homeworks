@@ -8,7 +8,7 @@ const counterRemove = document.querySelectorAll('.product__quantity-control_dec'
 	divCart = document.querySelector('.cart'),
 	cartProducts = Array.from(document.querySelector('.cart__products'));
 let arrVendorCode = [];
-let objectToLocal = [];
+let arr = [];
 
 divCart.style.display = 'none';
 
@@ -40,7 +40,9 @@ function generationCart(srcImage, count, data) {
     <div class="cart__product-count">${count}</div>`;
 	newProduct.insertAdjacentHTML('beforeend', productInfo);
 	arrVendorCode.push(data);
-	// updateToLocalStorage(srcImage, count, data, objectToLocal);
+	arr.push(data);
+	arr.push(count);
+	arr.push(srcImage);
 }
 
 cartAdd.forEach((item, i) => {
@@ -52,9 +54,12 @@ cartAdd.forEach((item, i) => {
 		} else {
 			generationCart(image[i].src, valueCounter[i].textContent, product[i].dataset.id);
 			setupRemoveListeners();
+			localStorage.setItem('cartProduct', arr);
 		}
+		
 	});
 });
+
 function setupRemoveListeners() {
 	const removeButtons = document.querySelectorAll('.cart__product-remove');
 	removeButtons.forEach((button) => {
@@ -70,47 +75,11 @@ function removeCartItem() {
 		arrVendorCode.splice(index, 1);
 	}
 	cartProduct.remove();
-	// localStorage.removeItem(cartProduct.getAttribute('data-id'));
 }
+
 
 setupRemoveListeners();
 
-// function updateToLocalStorage(srcImage, count, data, objectToLocal) {
-// 	objectToLocal = [srcImage, count];
-// 	localStorage.setItem(data, objectToLocal);
-// }
-
-// function renderingProduct() {
-// 	if (localStorage.length > 0) {
-// 		for(let i = 1; i <= localStorage.length+1; i++) {
-// 			if(localStorage.getItem(i) != null) {
-// 			let res = localStorage.getItem(i).split(',');
-// 			generationCart(res[0], res[1], i);
-// 			}
-// 		}
-// 	} 
-// }
-
-// document.addEventListener('DOMContentLoaded', renderingProduct());
-
-// function animationForCart() {
-// 	let imageProduct = [];
-// 	image.forEach(item => {
-// 		imageProduct.push(item.getBoundingClientRect().y);
-// 	})
-// 	let cartImageArr = [];
-// 	const cartImage = document.querySelectorAll('.cart__product-image');
-// 	cartImage.forEach(item => {
-// 		cartImageArr.push(item.getBoundingClientRect().y);
-// 	});
-
-// 	let diggerent = 665;
-	
-// 	console.log(imageProduct);
-// 	console.log(cartImageArr);
-// }
-// animationForCart();
-
 // localStorage.clear();
 
-// setupRemoveListeners();
+
