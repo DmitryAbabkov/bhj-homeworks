@@ -8,4 +8,6 @@ body {
 
 .poll__title {
   margin-bottom: 20px;
+  font-weight: 700;
+  font-size: 25px;
 }
